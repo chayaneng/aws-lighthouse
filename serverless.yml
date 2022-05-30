@@ -7,6 +7,15 @@ provider:
   runtime: nodejs14.x
   region: us-west-2
 
+layers:
+  lighthouse:
+    path: ./layer
+    description: Layer with all the required dependencies to run google lighthouse
+    compatibleRuntimes:
+      - nodejs14.x
+    licenseInfo: MIT
+    retain: true
+
 functions:
   hello:
     handler: src/hello.handler
@@ -16,7 +25,9 @@ functions:
           method: get
 
   postRequest:
-    handler: src/postrequest.handler
+    layers:
+      - arn:aws:lambda:us-west-2:930191050201:layer:lighthouse:2
+    handler: postrequest.handler
     events:
       - http:
           path: /post-request
